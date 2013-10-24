@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Roar-AdapterName: @ant.project.name@
+Roar-Type: ADAPTER
+Roar-Version: @version@
+Roar-Locked: false
+Roar-Description: Blah

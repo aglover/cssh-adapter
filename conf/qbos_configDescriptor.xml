@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<a:ConfigDescriptor xmlns:a="http://bmc.com/ao/xsd/2010/10/configDescriptor">
+	
+	<a:BooleanInput name="compact-xml">
+		<a:Explanation>When storing XML values in QBOS fields, should the adapter compact the xml (Valid values: true, false (default)). Should only be set to true in development environments.
+		</a:Explanation>
+		<a:Value>false</a:Value>
+	</a:BooleanInput>
+
+</a:ConfigDescriptor>

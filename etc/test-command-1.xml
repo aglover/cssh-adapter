@@ -1,0 +1,15 @@
+<adapter-request>
+    <target-adapter>responseAdapter</target-adapter>
+    <peer-location>
+        <location>this</location>
+        <peer-name/>
+    </peer-location>
+    <request-action>start_console</request-action>
+    <request-data>
+        <target>
+            <host>198.224.30.24</host>
+            <username>root</username>
+            <password>abc123</password>
+        </target>
+    </request-data>
+</adapter-request>
