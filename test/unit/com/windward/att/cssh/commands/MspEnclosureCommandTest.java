@@ -1,0 +1,25 @@
+package com.windward.att.cssh.commands;
+
+import com.realops.common.xml.XML;
+import com.realops.foundation.adapterframework.AdapterRequest;
+import com.realops.foundation.adapterframework.AdapterResponse;
+import com.windward.att.CustomSshActor;
+import org.junit.Test;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: cs7866
+ * Date: 10/25/13
+ * Time: 9:48 AM
+ * To change this template use File | Settings | File Templates.
+ */
+public class MspEnclosureCommandTest  {
+    @Test
+    public void testMSPConnection() throws Exception{
+        CustomSshActor adaptor = new CustomSshActor();
+        AdapterResponse adapterResponse = adaptor.performAction(new AdapterRequest(XML.read("etc/test-msp-connect.xml")));
+        System.out.println(adapterResponse.getMessage());
+        System.out.println(adapterResponse.getExecutionStatus());
+        System.out.println(adapterResponse.getData().toPrettyString());
+    }
+}
