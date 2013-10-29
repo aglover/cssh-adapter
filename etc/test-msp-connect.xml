@@ -6,11 +6,26 @@
     </peer-location>
     <request-action>msp_enclosure</request-action>
     <request-data>
-        <target>
-            <host>198.224.30.24</host>
-            <username>root</username>
-            <password>abc123</password>
-            <port>22</port>
-        </target>
+        <msp-request>
+            <jump-host>
+                <host>10.174.223.254</host>
+                <username>cs7866</username>
+                <password>1Changeme</password>
+                <port>22</port>
+            </jump-host>
+            <terminal-server>
+                <host>psloats02</host>
+                <port>2271</port>
+            </terminal-server>
+            <enclosure>
+                <name>PSLNZ01MSP2oa01</name>
+                <username>Administrator</username>
+                <password>changeme</password>
+            </enclosure>
+            <commands>
+                <command>show enclosure info</command>
+                <command>show enclosure info</command>
+            </commands>
+        </msp-request>
     </request-data>
 </adapter-request>
