@@ -1,9 +1,11 @@
 package com.windward.att.cssh.commands;
 
+import com.realops.common.enumeration.Status;
 import com.realops.common.xml.XML;
 import com.realops.foundation.adapterframework.AdapterRequest;
 import com.realops.foundation.adapterframework.AdapterResponse;
 import com.windward.att.CustomSshActor;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -18,8 +20,10 @@ public class MspEnclosureCommandTest  {
     public void testMSPConnection() throws Exception{
         CustomSshActor adaptor = new CustomSshActor();
         AdapterResponse adapterResponse = adaptor.performAction(new AdapterRequest(XML.read("etc/test-msp-connect.xml")));
-        System.out.println(adapterResponse.getMessage());
-        System.out.println(adapterResponse.getExecutionStatus());
+        Assert.assertEquals(adapterResponse.getExecutionStatus(), Status.SUCCESS);
+
+//        System.out.println(adapterResponse.getMessage());
+//        System.out.println(adapterResponse.getExecutionStatus());
         System.out.println(adapterResponse.getData().toPrettyString());
     }
 }
