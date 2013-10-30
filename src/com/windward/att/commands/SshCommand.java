@@ -40,8 +40,8 @@ public class SshCommand  extends AbstractCommand {
 
                 long startTime = System.currentTimeMillis();
                 if (command.getAttribute("ctrl").equalsIgnoreCase("true"))
+                   this.sendControlCharacter(ps, command.getText());
                 else
-
                     ps.println(command.getText());
                 boolean found = true;
                 if (prompt!=null && prompt.length()>0)

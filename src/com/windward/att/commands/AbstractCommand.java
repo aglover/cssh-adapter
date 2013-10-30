@@ -10,6 +10,7 @@ import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.transport.verification.HostKeyVerifier;
 
 import java.io.BufferedReader;
+import java.io.PrintStream;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
@@ -152,5 +153,40 @@ public abstract class AbstractCommand {
             System.out.println(e.getLocalizedMessage());
         }
         return found;
+    }
+    /*
+    * Send control character to the print stream. Convert the first character of the
+    * string 'character' into a the appropiate ascii control character?
+    *
+    * Throws Exception if the control character is not known.
+    *
+     */
+    protected void sendControlCharacter(PrintStream ps, String character) throws Exception{
+        switch (character.charAt(0)){
+            case ']':
+                ps.println(new byte[]{29});
+                break;
+            case '[':
+                ps.println(new byte[]{27});
+                break;
+            case 'N':
+            case 'n':
+                ps.println(new byte[]{14});
+                break;
+            case 'd':
+            case 'D':
+                ps.println(new byte[]{4});
+                break;
+            case 'z':
+            case 'Z':
+                ps.println(new byte[]{26});
+                break;
+            case 'x':
+            case 'X':
+                ps.println(new byte[]{24});
+                break;
+            default:
+                throw new Exception("Unknown control character: "+character);
+        }
     }
 }

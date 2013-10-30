@@ -91,8 +91,8 @@ public class MspEnclosureCommand extends AbstractCommand  {
                         break;
                 }
             } while (promptFound>=0);
-            ps.println("exit"); // Exit out of the enclousre prompt
-            ps.println(new byte[]{29}); //what is CTRL-]?
+            ps.println("exit"); // Exit out of the enclosure prompt
+            this.sendControlCharacter(ps, "]");
             ps.println("quit"); // Quit out of the terminal session.
             return commandsOutput;
         } catch (Exception e) {
