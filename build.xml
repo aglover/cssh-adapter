@@ -5,6 +5,7 @@
     <property name="build.dir" value="target"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="aroar.dir" value="${build.dir}/archive/${ant.project.name}_${version}"/>
 
     <property file="local.properties"/>
 
@@ -114,6 +115,52 @@
         </junitreport>
         <fail if="tests.failures"
               message="There were JUnit failures -- see the reports in ./${build.dir}/reports"/>
+    </target>
+
+    <target name="aroar" depends="clean, jar" description="build a BAO archive">
+
+        <mkdir dir="${build.dir}/archive"/>
+        <mkdir dir="${build.dir}/archive/META-INF"/>
+
+        <mkdir dir="${aroar.dir}"/>
+
+        <copy file="lib/com.qbos.QTP-0.78b.jar" tofile="${aroar.dir}/com.qbos.QTP.jar"/>
+        <copy file="lib/commons-lang-2.3.jar" tofile="${aroar.dir}/commons-lang-2.3.jar"/>
+        <copy file="lib/json-simple-1.1.1.jar" tofile="${aroar.dir}/json-simple-1.1.1.jar"/>
+        <copy file="lib/com.springsource.org.apache.axis-1.4.0.jar" tofile="${aroar.dir}/com.springsource.org.apache.axis-1.4.0.jar"/>
+        <copy file="lib/joda-time-2.2.jar" tofile="${aroar.dir}/joda-time-2.2.jar"/>
+        <copy file="lib/axis-jaxrpc-1.4.jar" tofile="${aroar.dir}/axis-jaxrpc-1.4.jar"/>
+        <copy file="lib/jaxen-1.1.2.jar" tofile="${aroar.dir}/jaxen-1.1.2.jar"/>
+        <!-- Consider doing a com.springsource.* here? -->
+        <copy file="lib/com.springsource.javax.activation-1.1.1.jar" tofile="${aroar.dir}/com.springsource.javax.activation-1.1.1.jar"/>
+        <copy file="lib/com.springsource.javax.jms-1.1.0.jar" tofile="${aroar.dir}/com.springsource.javax.jms-1.1.0.jar"/>
+        <copy file="lib/com.springsource.javax.mail-1.4.5.jar" tofile="${aroar.dir}/com.springsource.javax.mail-1.4.5.jar"/>
+        <copy file="lib/com.springsource.javax.wsdl-1.6.1.jar" tofile="${aroar.dir}/com.springsource.javax.wsdl-1.6.1.jar"/>
+        <copy file="lib/com.springsource.javax.xml.rpc-1.1.0.v20110517.jar" tofile="${aroar.dir}/com.springsource.javax.xml.rpc-1.1.0.v20110517.jar"/>
+        <copy file="lib/com.springsource.javax.xml.soap-1.3.0.jar" tofile="${aroar.dir}/com.springsource.javax.xml.soap-1.3.0.jar"/>
+        <copy file="lib/com.springsource.org.apache.commons.codec-1.6.0.jar" tofile="${aroar.dir}/com.springsource.org.apache.commons.codec-1.6.0.jar"/>
+        <copy file="lib/commons-discovery-0.5.jar" tofile="${aroar.dir}/commons-discovery-0.5.jar"/>
+        <copy file="lib/commons-io-1.3.2.jar" tofile="${aroar.dir}/commons-io-1.3.2.jar"/>
+        <copy file="lib/commons-lang3-3.1.jar" tofile="${aroar.dir}/commons-lang3-3.1.jar"/>
+
+        <copy file="${build.dir}/${ant.project.name}-${version}.jar"
+              tofile="${aroar.dir}/${ant.project.name}-${version}.jar"/>
+        <copy file="conf/qbos_configDescriptor.xml" tofile="${aroar.dir}/qbos_configDescriptor.xml"/>
+        <copy file="conf/config.xml" tofile="${aroar.dir}/config.xml"/>
+        <replace file="${aroar.dir}/config.xml">
+            <replacefilter token="@ant.project.name@" value="${ant.project.name}"/>
+            <replacefilter token="@version@" value="${version}"/>
+        </replace>
+
+        <copy file="conf/MANIFEST.MF" tofile="${build.dir}/archive/META-INF/MANIFEST.MF"/>
+        <replace file="${build.dir}/archive/META-INF/MANIFEST.MF">
+            <replacefilter token="@ant.project.name@" value="${ant.project.name}"/>
+            <replacefilter token="@version@" value="${version}"/>
+        </replace>
+
+        <jar destfile="${build.dir}/${ant.project.name}_${version}.aroar"
+             manifest="${build.dir}/archive/META-INF/MANIFEST.MF"
+             basedir="${build.dir}/archive"/>
     </target>
 
 </project>
