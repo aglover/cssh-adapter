@@ -23,8 +23,11 @@
                 <password>changeme</password>
             </enclosure>
             <commands>
-                <command>show enclosure info</command>
-
+                <command read-enclosure-prompt="true">show date</command>
+                <command read-enclosure-prompt="true">show ebipa</command>
+                <command read-enclosure-prompt="true">show snmp</command>
+                <command read-enclosure-prompt="true">show network</command>
+                <command read-enclosure-prompt="true">show interconnect list</command>
             </commands>
         </msp-request>
     </request-data>

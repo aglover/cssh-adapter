@@ -150,7 +150,7 @@ public abstract class AbstractCommand {
                             buf.append((char)character);
                             line = buf.toString();
                             LOGGER.error(line);
-                            System.out.println(line);
+//                            System.out.println(line);
                             for (int i=0;i<prompts.size();i++){
                                 if (line.startsWith(prompts.get(i))){
                                     found = i;

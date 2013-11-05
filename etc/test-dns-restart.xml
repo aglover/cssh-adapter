@@ -14,7 +14,7 @@
                 <port>22</port>
             </target>
             <commands>
-                <command pause-before-seconds="3000" prompt="Are you sure you want to reset /SYS (y/n)?">reset /SYS</command>
+                <command pause-before-milliseconds="3000" prompt="Are you sure you want to reset /SYS (y/n)?">reset /SYS</command>
                 <command prompt="->">y</command>
                 <command prompt="Are you sure you want to start /SP/console (y/n)?">start /SP/console</command>
                 <command prompt="N:">y</command>

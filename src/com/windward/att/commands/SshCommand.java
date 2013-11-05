@@ -38,7 +38,7 @@ public class SshCommand  extends AbstractCommand {
                 XML output = new XML("output");
                 String prompt = command.getAttribute("prompt");
 
-                long pause = command.getLongAttribute("pause-before-seconds",0);
+                long pause = command.getLongAttribute("pause-before-milliseconds",0);
                 if (pause>0)
                     Thread.sleep(pause);
                 long startTime = System.currentTimeMillis();
@@ -51,7 +51,7 @@ public class SshCommand  extends AbstractCommand {
                      found = readUntilPromptFound(bufferedReader, prompt, output);
                 long duration = System.currentTimeMillis() - startTime;
 
-                pause = command.getLongAttribute("pause-after-seconds",0);
+                pause = command.getLongAttribute("pause-after-milliseconds",0);
                 if (pause>0)
                     Thread.sleep(pause);
                 XML metadata = new XML("metadata");
