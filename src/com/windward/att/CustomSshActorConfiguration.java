@@ -15,13 +15,19 @@ import java.util.Set;
 public class CustomSshActorConfiguration extends BaseAdapterConfiguration {
     public CustomSshActorConfiguration(String adapterId) {
         super(adapterId);
+        addValidKey("default-timeout");
     }
 
     public CustomSshActorConfiguration(String id, Hashtable defaults) {
         super(id, defaults);
+        addValidKey("default-timeout");
     }
 
     public CustomSshActorConfiguration(String id, Hashtable defaults, Set validKeys, Set requiredKeys) throws AdapterConfigurationException {
         super(id, defaults, validKeys, requiredKeys);
+        addValidKey("default-timeout");
+    }
+    public long defaultTimeout() {
+        return this.getLongProperty("default-timeout");
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<a:ConfigDescriptor xmlns:a="http://bmc.com/ao/xsd/2010/10/configDescriptor">
+	
+	<a:LongInput name="default-timeout">
+		<a:Explanation>Default timeout for each command issued by the customer SSH actor adapter.
+		</a:Explanation>
+		<a:Value>10000</a:Value>
+	</a:LongInput>
+
+</a:ConfigDescriptor>

@@ -8,6 +8,7 @@ import com.realops.foundation.adapterframework.configuration.BaseAdapterConfigur
 import com.windward.att.CustomSshActorConfiguration;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.transport.verification.HostKeyVerifier;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
@@ -24,6 +25,7 @@ import java.util.Date;
 public abstract class AbstractCommand {
     private SSHClient sshClient;
     private CustomSshActorConfiguration config;
+    private static Logger LOGGER = Logger.getLogger(AbstractCommand.class);
 
     public void setConfig(BaseAdapterConfiguration aConfig) {
         if (aConfig instanceof CustomSshActorConfiguration) {
@@ -58,6 +60,7 @@ public abstract class AbstractCommand {
             response.addChild(data);
             return new AdapterResponse(duration, Status.SUCCESS.toString(), response, Status.SUCCESS);
         } catch (Exception e) {
+            e.printStackTrace();
             long duration = new Date().getTime() - startTime;
             XML response = new XML("response");
             response.addChild("status").setText(Status.ERROR.toString());
@@ -72,7 +75,7 @@ public abstract class AbstractCommand {
     /**
      * Abstract method for the concrete class to implement the command.
      *
-     * @param XML the XML provided by the adapter cal in workflow
+     * @param requestXML the XML provided by the adapter cal in workflow
      * @return XML Object to return in the data portion of the adatper response.
      * @throws Exception
      */
@@ -99,19 +102,23 @@ public abstract class AbstractCommand {
         return client;
     }
 
+    protected long defaultTimeout(){
+        return this.config==null ? 60000 : this.config.defaultTimeout();
+    }
     protected boolean readUntilPromptFound(BufferedReader bufferedReader, String prompt){
         ArrayList<String> prompts = new ArrayList<String>(1);
         prompts.add(prompt);
-        return  0==readUntilPromptFound(bufferedReader, prompts, 10000, null);
+        return  0==readUntilPromptFound(bufferedReader, prompts, this.defaultTimeout(), null);
     }
     protected boolean readUntilPromptFound(BufferedReader bufferedReader, String prompt, XML output){
         ArrayList<String> prompts = new ArrayList<String>(1);
         prompts.add(prompt);
-        return  0==readUntilPromptFound(bufferedReader, prompts, 10000, output);
+        return  0==readUntilPromptFound(bufferedReader, prompts, this.defaultTimeout(), output);
     }
     protected int readUntilPromptFound( BufferedReader bufferedReader, ArrayList<String> prompts){
-        return readUntilPromptFound(bufferedReader, prompts, 10000, null);
+        return readUntilPromptFound(bufferedReader, prompts, this.defaultTimeout(), null);
     }
+
     protected int readUntilPromptFound( BufferedReader bufferedReader, ArrayList<String> prompts, long timeout, XML output){
         int found = -1;
         long finishTime = System.currentTimeMillis()+timeout;
@@ -126,9 +133,12 @@ public abstract class AbstractCommand {
                         case 10:
                         case 13:
                             if (output!=null && line!=null && line.length()>0)   {
+                                System.out.println("Output: "+line);
+                                LOGGER.error("Output: "+line);
                                 XML lineXML = new XML("line");
                                 lineXML.setAttribute("index",lineIndex);
-                                lineXML.setText(line);
+
+                                lineXML.setCDATA(line.replaceAll("\\p{Cc}", ""));
                                 output.addChild(lineXML);
                                 lineIndex++;
                             }
@@ -139,6 +149,8 @@ public abstract class AbstractCommand {
                         default:
                             buf.append((char)character);
                             line = buf.toString();
+                            LOGGER.error(line);
+                            System.out.println(line);
                             for (int i=0;i<prompts.size();i++){
                                 if (line.startsWith(prompts.get(i))){
                                     found = i;
@@ -162,6 +174,7 @@ public abstract class AbstractCommand {
     *
      */
     protected void sendControlCharacter(PrintStream ps, String character) throws Exception{
+        System.out.println("Sending control character: "+character);
         switch (character.charAt(0)){
             case ']':
                 ps.println(new byte[]{29});

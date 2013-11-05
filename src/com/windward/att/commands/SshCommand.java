@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class SshCommand  extends AbstractCommand {
     @Override
     public XML executeCommand(XML requestXML) throws Exception {
-        SSHClient client = this.clientFromXML(requestXML.getChild("jump-host"));
+        SSHClient client = this.clientFromXML(requestXML.getChild("target"));
         final Session session = client.startSession();
         XML commandsOutput = new XML("commands-output");
         try {
@@ -38,8 +38,11 @@ public class SshCommand  extends AbstractCommand {
                 XML output = new XML("output");
                 String prompt = command.getAttribute("prompt");
 
+                long pause = command.getLongAttribute("pause-before-seconds",0);
+                if (pause>0)
+                    Thread.sleep(pause);
                 long startTime = System.currentTimeMillis();
-                if (command.getAttribute("ctrl").equalsIgnoreCase("true"))
+                if (command.getBooleanAttribute("ctrl"))
                    this.sendControlCharacter(ps, command.getText());
                 else
                     ps.println(command.getText());
@@ -48,6 +51,9 @@ public class SshCommand  extends AbstractCommand {
                      found = readUntilPromptFound(bufferedReader, prompt, output);
                 long duration = System.currentTimeMillis() - startTime;
 
+                pause = command.getLongAttribute("pause-after-seconds",0);
+                if (pause>0)
+                    Thread.sleep(pause);
                 XML metadata = new XML("metadata");
                 metadata.addChild("command").setText(command.getText());
                 metadata.addChild("line-count").setText(""+output.getChildren().length);
@@ -61,6 +67,7 @@ public class SshCommand  extends AbstractCommand {
             }
             return commandsOutput;
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         } finally {
             session.close();

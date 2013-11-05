@@ -4,19 +4,21 @@
         <location>this</location>
         <peer-name/>
     </peer-location>
-    <request-action>start_console</request-action>
+    <request-action>ssh</request-action>
     <request-data>
         <ssh-reqeust>
             <target>
                 <host>198.224.30.24</host>
                 <username>root</username>
-                <password>abc123</password>
+                <password>changeme</password>
+                <port>22</port>
             </target>
             <commands>
-                <command prompt="Are you sure you want ot reset /SYS (y/n)?">reset /SYS</command>
+                <command pause-before-seconds="3000" prompt="Are you sure you want to reset /SYS (y/n)?">reset /SYS</command>
                 <command prompt="->">y</command>
-                <command prompt="Are you sure you want ot start /SYS (y/n)?">start /SP/console</command>
-                <command prompt="Serial console started. to stop, type esc (">y</command>
+                <command prompt="Are you sure you want to start /SP/console (y/n)?">start /SP/console</command>
+                <command prompt="N:">y</command>
+                <command prompt="N:" ctrl="true">N</command>
                 <command ctrl="true">N</command>
             </commands>
         </ssh-reqeust>

@@ -4,6 +4,7 @@ import com.realops.common.xml.XML;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.HostKeyVerifier;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class MspEnclosureCommand extends AbstractCommand  {
+    private static Logger LOGGER = Logger.getLogger(MspEnclosureCommand.class);
 
 
     @Override
@@ -30,7 +32,7 @@ public class MspEnclosureCommand extends AbstractCommand  {
         try {
             session.allocateDefaultPTY();
             Session.Shell shell = session.startShell();
-
+            LOGGER.error("Started session");
             OutputStream ops = shell.getOutputStream();
             PrintStream ps = new PrintStream(ops, true);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(shell.getInputStream()));
@@ -42,10 +44,14 @@ public class MspEnclosureCommand extends AbstractCommand  {
             prompts.add("Password:");                // 2
             String enclosurePrompt = enclosureName + ">";
             prompts.add(enclosurePrompt);         // 3
+            LOGGER.error("added prompts");
 
             XML terminalServer = requestXML.getChild("terminal-server");
+            LOGGER.error("Starting telnet");
             ps.println("telnet " + terminalServer.getChild("host").getText() + " " + terminalServer.getChild("port").getText());
-            int promptFound = readUntilPromptFound(bufferedReader, prompts);;
+            LOGGER.error("Sent, now waiting for prmopt");
+            int promptFound = readUntilPromptFound(bufferedReader, prompts);
+            LOGGER.error("Got promptFound: "+promptFound);
             boolean loggedIn = false;
             do {
                 promptFound = readUntilPromptFound(bufferedReader, prompts);

@@ -1,9 +1,10 @@
 <adapter-metadata>
     <description></description>
-    <class-name>com.windward.qbosatt.QbosActor</class-name>
+    <class-name>com.windward.att.CustomSshActor</class-name>
     <adapter-jar>@ant.project.name@-@version@.jar</adapter-jar>
     <required-jars>
-        <required-jar>com.qbos.QTP.jar</required-jar>
+        <required-jar>jsch.jar</required-jar>
+        <required-jar>sshj</required-jar>
         <required-jar>commons-lang-2.3.jar</required-jar>
         <required-jar>axis-jaxrpc-1.4.jar</required-jar>
         <required-jar>com.springsource.org.apache.axis-1.4.0.jar</required-jar>

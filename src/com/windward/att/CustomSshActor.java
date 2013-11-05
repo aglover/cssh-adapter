@@ -10,6 +10,7 @@ import com.realops.foundation.adapterframework.AdapterResponse;
 import com.windward.att.commands.AbstractCommand;
 import net.schmizz.sshj.SSHClient;
 import org.apache.commons.lang.WordUtils;
+import org.apache.log4j.Logger;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ import static org.apache.commons.lang.WordUtils.capitalizeFully;
 public class CustomSshActor extends AbstractActorAdapter {
 
     private SSHClient sshClient;
+    private static Logger LOGGER = Logger.getLogger(CustomSshActor.class);
 
     public void setSshClient(SSHClient client) {
         this.sshClient = client;
@@ -38,10 +40,13 @@ public class CustomSshActor extends AbstractActorAdapter {
     public AdapterResponse performAction(AdapterRequest adapterRequest) throws AdapterException, InterruptedException {
         long startTime = new Date().getTime();
         try {
+            LOGGER.error("Starting command: " + adapterRequest.getAction());
             AbstractCommand cmd = newCommand(adapterRequest);
             cmd.setSshClient(sshClientInstance());
             cmd.setConfig(this.getConfiguration());
-            return cmd.execute(adapterRequest);
+            AdapterResponse adapterResponse = cmd.execute(adapterRequest);
+            LOGGER.error("Returning with response: " +adapterResponse.getData().toPrettyString());
+            return adapterResponse;
         } catch (Exception e) {
             long duration = new Date().getTime()- startTime;
             XML response = new XML("response");

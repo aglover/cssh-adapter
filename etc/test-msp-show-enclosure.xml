@@ -24,7 +24,6 @@
             </enclosure>
             <commands>
                 <command>show enclosure info</command>
-
             </commands>
         </msp-request>
     </request-data>
