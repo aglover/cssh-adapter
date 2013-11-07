@@ -15,7 +15,7 @@
             </jump-host>
             <terminal-server>
                 <host>psloats02</host>
-                <port>2271</port>
+                <port>2275</port>
             </terminal-server>
             <enclosure>
                 <name>PSLNZ01MSP2oa01</name>
@@ -23,9 +23,11 @@
                 <password>changeme</password>
             </enclosure>
             <commands>
-                <command prompt="PSLNZ01MSP2oa01">show date</command>
-                <command prompt="PSLNZ01MSP2oa01">show network</command>
-                <command>show interconnect list</command>
+                <command read-enclosure-prompt="true">show date</command>
+                <command read-enclosure-prompt="true">show ebipa</command>
+                <command read-enclosure-prompt="true">show snmp</command>
+                <command read-enclosure-prompt="true">show network</command>
+                <command read-enclosure-prompt="true">show interconnect list</command>
             </commands>
         </msp-request>
     </request-data>

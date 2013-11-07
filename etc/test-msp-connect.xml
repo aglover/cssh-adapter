@@ -24,10 +24,7 @@
             </enclosure>
             <commands>
                 <command read-enclosure-prompt="true">show date</command>
-                <command read-enclosure-prompt="true">show ebipa</command>
-                <command read-enclosure-prompt="true">show snmp</command>
-                <command read-enclosure-prompt="true">show network</command>
-                <command read-enclosure-prompt="true">show interconnect list</command>
+                <command >show ebipa</command>
             </commands>
         </msp-request>
     </request-data>

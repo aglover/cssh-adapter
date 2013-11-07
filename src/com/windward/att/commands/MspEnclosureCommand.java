@@ -39,7 +39,7 @@ public class MspEnclosureCommand extends AbstractCommand  {
             ArrayList<String> prompts = new ArrayList<String>(4);
             XML enclosure = requestXML.getChild("enclosure");
             String enclosureName = enclosure.getChild("name").getText();
-            prompts.add("Escape character is");      // 0
+            prompts.add("Escape character is '^]'.");      // 0
             prompts.add(enclosureName + " login:");   // 1
             prompts.add("Password:");                // 2
             String enclosurePrompt = enclosureName + ">";
@@ -47,14 +47,22 @@ public class MspEnclosureCommand extends AbstractCommand  {
             LOGGER.error("added prompts");
 
             XML terminalServer = requestXML.getChild("terminal-server");
-            LOGGER.error("Starting telnet");
-            ps.println("telnet " + terminalServer.getChild("host").getText() + " " + terminalServer.getChild("port").getText());
-            LOGGER.error("Sent, now waiting for prmopt");
-            int promptFound = readUntilPromptFound(bufferedReader, prompts);
-            LOGGER.error("Got promptFound: "+promptFound);
+            int promptFound = -1;
+            int attempts = 0;
+            do {
+                if (attempts>0)
+                  Thread.sleep(2000);
+                LOGGER.error("Starting telnet");
+                ps.println("telnet " + terminalServer.getChild("host").getText() + " " + terminalServer.getChild("port").getText());
+                LOGGER.error("Sent, now waiting for prompt");
+                promptFound =  readUntilPromptFound(bufferedReader, prompts);
+                LOGGER.error("Got promptFound: "+promptFound);
+                attempts++;
+            } while (promptFound<0 && attempts<15);
+
             boolean loggedIn = false;
             do {
-                promptFound = readUntilPromptFound(bufferedReader, prompts);
+
                 switch (promptFound)    {
                     case 0:
                         ps.println();
@@ -88,7 +96,7 @@ public class MspEnclosureCommand extends AbstractCommand  {
                                 if (command.getBooleanAttribute("read-enclosure-prompt"))
                                     readUntilPromptFound(bufferedReader,enclosurePrompt);
 
-                                boolean found = true;
+                                boolean found = false;
                                 if (prompt!=null && prompt.length()>0)
                                     found = readUntilPromptFound(bufferedReader, prompt, output);
                                 else
@@ -119,10 +127,15 @@ public class MspEnclosureCommand extends AbstractCommand  {
                         }
                         break;
                 }
+                promptFound = readUntilPromptFound(bufferedReader, prompts);
+                LOGGER.error("Got promptFound: "+promptFound);
             } while (promptFound>=0);
+
             ps.println("exit"); // Exit out of the enclosure prompt
             this.sendControlCharacter(ps, "]");
             ps.println("quit"); // Quit out of the terminal session.
+            if (!loggedIn)
+                throw new Exception("Unable to log into enclosure.");
             return commandsOutput;
         } catch (Exception e) {
            throw e;
