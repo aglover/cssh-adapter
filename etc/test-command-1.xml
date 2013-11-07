@@ -6,10 +6,20 @@
     </peer-location>
     <request-action>start_console</request-action>
     <request-data>
-        <target>
-            <host>198.224.30.24</host>
-            <username>root</username>
-            <password>abc123</password>
-        </target>
+        <dns-restart-reqeust>
+            <target>
+                <host>198.224.30.24</host>
+                <username>root</username>
+                <password>abc123</password>
+            </target>
+            <commands>
+               <command when="->">reset /SYS</command>
+                <command when="Are you sure you want ot reset /SYS (y/n)?">y</command>
+                <command when="->">start /SP/console</command>
+                <command when="Are you sure you want ot start /SYS (y/n)?">y</command>
+                <command when="Serial console started. to stop, type esc (" ctrl="true">N</command>
+            </commands>
+        </dns-restart-reqeust>
+
     </request-data>
 </adapter-request>

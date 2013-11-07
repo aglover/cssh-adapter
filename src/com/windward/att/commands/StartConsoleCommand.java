@@ -19,10 +19,10 @@ public class StartConsoleCommand extends AbstractCommand {
 
     @Override
     public XML executeCommand(XML requestXML) throws Exception {
-        SSHClient client = sshClientInstance();
-        client.connect(requestXML.getChild("host").getText());
-        client.authPassword(requestXML.getChild("username").getText(), requestXML.getChild("password").getText());
+
+        SSHClient client = this.clientFromXML(requestXML.getChild("target"));
         final Session session = client.startSession();
+
         try {
             session.allocateDefaultPTY();
             Session.Shell shell = session.startShell();
@@ -34,7 +34,9 @@ public class StartConsoleCommand extends AbstractCommand {
                     .bufSize(shell.getLocalMaxPacketSize())
                     .spawn("ptyout");
 
+
             OutputStream ops = shell.getOutputStream();
+
             PrintStream ps = new PrintStream(ops, true);
             ps.println("reset /SYS");
             Thread.sleep(1000);
@@ -49,7 +51,10 @@ public class StartConsoleCommand extends AbstractCommand {
             ps.println(new byte[]{14}); //what is CTRL-N?
 
             return null;
-        } finally {
+        } catch (Exception e) {
+            throw e;
+        }
+        finally {
             session.close();
             client.disconnect();
         }

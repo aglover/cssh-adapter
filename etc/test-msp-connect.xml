@@ -1,0 +1,31 @@
+<adapter-request>
+    <target-adapter>responseAdapter</target-adapter>
+    <peer-location>
+        <location>this</location>
+        <peer-name/>
+    </peer-location>
+    <request-action>msp_enclosure</request-action>
+    <request-data>
+        <msp-request>
+            <jump-host>
+                <host>10.174.223.254</host>
+                <username>cs7866</username>
+                <password>1Changeme</password>
+                <port>22</port>
+            </jump-host>
+            <terminal-server>
+                <host>psloats02</host>
+                <port>2271</port>
+            </terminal-server>
+            <enclosure>
+                <name>PSLNZ01MSP2oa01</name>
+                <username>Administrator</username>
+                <password>changeme</password>
+            </enclosure>
+            <commands>
+                <command read-enclosure-prompt="true">show date</command>
+                <command >show ebipa</command>
+            </commands>
+        </msp-request>
+    </request-data>
+</adapter-request>
